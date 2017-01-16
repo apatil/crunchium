@@ -55,7 +55,7 @@ let join_paths (p1 : string) (p2 : string) : string =
   let parts = (split p1) @ (split p2) in
   "/" ^ String.concat "/" parts
 
-let serve_folder ?(stream=true) ?(headers=(None : Cohttp.Header.t option)) (route : string) (module C : Crunch) (max_length : int) : Opium_app.builder =
+let serve_folder ?(stream=false) ?(headers=(None : Cohttp.Header.t option)) (route : string) (module C : Crunch) (max_length : int) : Opium_app.builder =
   let crunch = crunched_file (module C) in
   Opium_app.get (join_paths route "/:fname") @@ fun req ->
     let fname = Opium_app.param req "fname" in
@@ -69,11 +69,12 @@ let serve_folder ?(stream=true) ?(headers=(None : Cohttp.Header.t option)) (rout
       log Logs.Error "File not found in crunch" tags;
       Opium_app.respond' ~code:`Not_found (`String "File Not Found")
     | `Ok cstructs ->
-      log Logs.Debug "Streaming response" tags;
-      if stream
-      then
+      match stream with
+      | true ->
+        log Logs.Debug "Streaming response" tags;
         stream_cstructs headers cstructs
-      else
+      | false ->
+        log Logs.Debug "Sending batch response" tags;
         batch_cstructs headers cstructs
 
 let serve_file ?(stream=false) ?(headers=(None : Cohttp.Header.t option)) (route : string) (module C : Crunch) (fname : string) (max_length : int) : Opium_app.builder Lwt.t =
@@ -83,9 +84,10 @@ let serve_file ?(stream=false) ?(headers=(None : Cohttp.Header.t option)) (route
   | `Ok cstructs ->
     Lwt.return (Opium_app.get "/" @@ fun req ->
       let tags = request_tags fname req in
-      log Logs.Debug "Received file request, streaming response" tags;
-      if stream
-      then
+      match stream with
+      | true ->
+        log Logs.Debug "Received file request, streaming response" tags;
         stream_cstructs headers cstructs
-      else
+      | false ->
+        log Logs.Debug "Received file request, sending batch response" tags;
         batch_cstructs headers cstructs)
