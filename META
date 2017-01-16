@@ -1,0 +1,8 @@
+# OASIS_START
+version = "0.0.1"
+description = "Create Opium builders that serve ocaml-crunch'ed static files"
+requires = "lwt opium logs"
+archive(byte) = "crunchium.cma"
+archive(native) = "crunchium.cmxa"
+exists_if = "crunchium.cma"
+# OASIS_STOP

@@ -1,0 +1,21 @@
+opam-version: "1.2"
+name: "crunchium"
+version: "0.0.1"
+maintainer: "Anand Patil <anand.prabhakar.patil@gmail.com>"
+authors: [
+  "Anand Patil <anand.prabhakar.patil@gmail.com>"
+]
+homepage: "https://github.com/apatil/crunchium"
+bug-reports: "https://github.com/apatil/crunchium"
+license: "MIT"
+dev-repo: "https://github.com/apatil/crunchium.git"
+build: [ [make "all"] ]
+install: [make "install"]
+remove: ["ocamlfind" "remove" "crunchium"]
+depends: [
+  "ocamlfind" {build}
+  "lwt" {>= "2.6.0"}
+  "opium" {>= "0.15.1"}
+  "logs" {>= "0.6.2"}
+]
+available: [ ocaml-version >= "4.03.0" ]
