@@ -60,7 +60,7 @@ let serve_folder ?(stream=false) ?(headers=(None : Cohttp.Header.t option)) (rou
   Opium_app.get (join_paths route "/:fname") @@ fun req ->
     let fname = Opium_app.param req "fname" in
     let tags = request_tags fname req in
-    log Logs.Debug "Received file request" tags;
+    log Logs.Info "Received file request" tags;
     crunch fname max_length >>= function
     | `ConnectFailed ->
       log Logs.Error "Failed to connect" tags;
@@ -71,10 +71,10 @@ let serve_folder ?(stream=false) ?(headers=(None : Cohttp.Header.t option)) (rou
     | `Ok cstructs ->
       match stream with
       | true ->
-        log Logs.Debug "Streaming response" tags;
+        log Logs.Info "Streaming response" tags;
         stream_cstructs headers cstructs
       | false ->
-        log Logs.Debug "Sending batch response" tags;
+        log Logs.Info "Sending batch response" tags;
         batch_cstructs headers cstructs
 
 let serve_file ?(stream=false) ?(headers=(None : Cohttp.Header.t option)) (route : string) (module C : Crunch) (fname : string) (max_length : int) : Opium_app.builder Lwt.t =
@@ -86,8 +86,8 @@ let serve_file ?(stream=false) ?(headers=(None : Cohttp.Header.t option)) (route
       let tags = request_tags fname req in
       match stream with
       | true ->
-        log Logs.Debug "Received file request, streaming response" tags;
+        log Logs.Info"Received file request, streaming response" tags;
         stream_cstructs headers cstructs
       | false ->
-        log Logs.Debug "Received file request, sending batch response" tags;
+        log Logs.Info "Received file request, sending batch response" tags;
         batch_cstructs headers cstructs)
