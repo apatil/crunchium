@@ -1,4 +1,4 @@
-.PHONY: all build install remove clean
+.PHONY: all build clean
 
 all : build
 
@@ -8,9 +8,6 @@ build :
 
 	ocamlfind ocamlopt -package lwt,opium,logs -linkpkg crunchium.mli crunchium.ml crunchium.mli crunchium.ml -c
 	ocamlfind ocamlopt -a -o crunchium.cmxa crunchium.cmx
-
-install : all
-	ocamlfind install crunchium *
 
 clean :
 	- rm *.cmi

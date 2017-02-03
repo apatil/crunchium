@@ -1,0 +1,7 @@
+lib: [
+	"crunchium.cmi"
+  "crunchium.cma"
+  "crunchium.cmxa"
+  "crunchium.ml"
+  "crunchium.mli"
+]

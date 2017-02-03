@@ -7,15 +7,13 @@ authors: [
 ]
 homepage: "https://github.com/apatil/crunchium"
 bug-reports: "https://github.com/apatil/crunchium"
-license: "MIT"
+license: "Unlicense"
 dev-repo: "https://github.com/apatil/crunchium.git"
 build: [ [make "all"] ]
-install: [make "install"]
-remove: ["ocamlfind" "remove" "crunchium"]
 depends: [
   "ocamlfind" {build}
-  "lwt" {>= "2.6.0"}
-  "opium" {>= "0.15.1"}
+  "lwt" {>= "2.5.2"}
+  "opium" {>= "0.15.0"}
   "logs" {>= "0.6.2"}
 ]
 available: [ ocaml-version >= "4.03.0" ]
